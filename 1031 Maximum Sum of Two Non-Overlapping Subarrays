@@ -1,0 +1,29 @@
+class Solution {
+public:
+    
+    int find(vector<int>& arr,int l,int m)
+    {
+        int n=arr.size();
+        vector<int> presum(n,0);
+        presum[0]=arr[0];
+        for(int i=1;i<n;i++) presum[i]=presum[i-1]+arr[i];
+        
+        int lblock=presum[l-1];
+        int mblock=presum[m-1];
+        int res=presum[l+m-1];
+    
+        
+        for(int i=l+m;i<n;i++)
+        {
+            lblock=max(lblock,presum[i-m]-presum[i-m-l]);
+            int currmblock=presum[i]-presum[i-m];
+            res=max(res,lblock+currmblock);
+        }
+        return res;
+    }
+    
+    int maxSumTwoNoOverlap(vector<int>& arr, int l, int m) {
+        return max(find(arr,l,m),find(arr,m,l));   
+    }
+        
+};
