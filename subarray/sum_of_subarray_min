@@ -1,0 +1,72 @@
+// helper.cpp : This file contains the 'main' function. Program execution begins and ends there.
+//
+
+#include <iostream>
+#include<string>
+#include<climits>
+#include<stack>
+using namespace std;
+
+
+
+// A[i]*f(i) 
+// f(i) = no of subarrays in which A[i] is minimum
+
+
+int sumSubarrayMins(int *arr,int n)
+{
+	int left[n],right[n];
+	stack<pair<int,int>> s1,s2;
+	
+	for(int i=0;i<n;i++)
+	{
+		
+		// include the current element
+		int cnt=1;
+		
+		// no of elemets to left are bigger than current number
+		// if stack is not empty and check if element on left are bigger
+    
+		while(!s1.empty() and s1.top().first>arr[i])
+		{
+			cnt+=s1.top().second;
+			s1.pop();
+		}
+		s1.push({arr[i],cnt});
+		left[i]=cnt;
+	}
+	
+	
+	for(int i=n-1;i>=0;--i)
+	{
+		int cnt=1;
+		while(!s2.empty() and arr[i]<=s2.top().first)
+		{
+			cnt+=s2.top().second;
+			s2.pop();
+		}
+		s2.push({arr[i],cnt});
+		right[i]=cnt;
+	}
+	
+	int res=0;
+	
+	for(int i=0;i<n;i++)
+	{
+		res+=(left[i]*arr[i]*right[i]);
+	}
+	return res;
+}
+
+
+int main() 
+{ 
+    int A[] = { 3, 1, 2, 4 }; 
+  
+    int n = sizeof(A) / sizeof(A[0]); 
+  
+    // function call to get required resultult 
+    cout << sumSubarrayMins(A, n); 
+  
+    return 0; 
+} 
