@@ -1,0 +1,44 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define ll long long
+
+int main()
+{
+    
+    
+    int t;
+    cin>>t;
+    
+    while(t--)
+    {
+        ll n,k;
+        cin>>n>>k;
+        ll arr[n];
+        ll presum[n];
+        ll ans=0;
+        for(int i=0;i<n;i++)
+        {
+            cin>>arr[i];
+            
+        }
+        presum[0]=arr[0];
+        if(arr[0]>k or arr[0]<-1*k) ans++;
+        for(int i=1;i<n;i++)
+        {
+            presum[i]=arr[i]+presum[i-1];
+            if(presum[i]>k or presum[i]<-1*k) ans++;
+        }
+        sort(presum,presum+n);
+      
+    
+        for(int i=0;i<n;i++)
+        {
+            ll temp=presum[i]+k;
+            ll idx=upper_bound(presum,presum+n,temp)-presum;
+            ans+=(n-idx);
+        }
+        cout<<ans<<endl;
+        
+    }
+    return 0;
+}
