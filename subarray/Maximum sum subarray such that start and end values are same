@@ -1,0 +1,40 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+
+int maxValue(int *arr,int n)
+{
+
+    unordered_map<int,int> first,last;
+    int presum[n+1];
+    presum[0]=0;
+
+    for(int i=1;i<=n;i++)
+    {
+        presum[i]=presum[i-1]+arr[i-1];
+        if(first.count(arr[i-1])==0) first[arr[i-1]]=i;
+        last[arr[i-1]]=i;
+    }
+    int ans=0;
+    for(int i=1;i<=n;i++)
+    {
+        int s=first[arr[i-1]];
+        int e=last[arr[i-1]];
+        if(first.count(arr[i-1]) and last.count(arr[i-1]))
+        {
+            ans=max(ans,presum[e]-presum[s-1]);
+        }
+    }
+    return ans;
+}
+
+int main()
+{
+
+    int arr[] = {1, 3, 2, 2, 3};
+	int n = sizeof(arr) / sizeof(arr[0]);
+
+	cout << maxValue(arr, n);
+
+	return 0;
+}
