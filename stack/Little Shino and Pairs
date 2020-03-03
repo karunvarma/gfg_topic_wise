@@ -1,0 +1,52 @@
+#include <iostream>
+#include<vector>
+#include<bits/stdc++.h>
+#define ll long long
+using namespace std;
+
+
+
+
+
+int main() 
+{ 
+	
+		
+	
+	int n;
+	cin>>n;
+	
+	int arr[n];
+	for(int i=0;i<n;i++) cin>>arr[i];
+	
+
+	
+	stack<int> s;
+	set<pair<int,int>> st;
+	s.push(arr[0]);
+	
+	for(int i=1;i<n;i++)
+	{
+		
+		if(!s.empty() and s.top()<arr[i])
+		{
+			st.insert({arr[i],s.top()});
+			s.pop();
+		}
+		
+		
+		// if there is any prev greater
+		if(!s.empty())
+		{
+			st.insert({ max(arr[i],s.top()),min(arr[i],s.top())});
+		}
+		
+		// push current element
+		s.push(arr[i]);
+	}
+	
+// 	for(auto x:st) cout<<x.first<<" "<<x.second<<endl;
+	cout<<st.size()<<endl;
+	
+	return 0; 
+} 
