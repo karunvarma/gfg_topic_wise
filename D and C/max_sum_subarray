@@ -1,0 +1,52 @@
+#include <iostream>
+#include<vector>
+#define ll long long
+using namespace std;
+
+
+struct Node
+{
+	ll max,pre_max,suff_max,tsum;
+};
+
+
+Node getNode(ll x)
+{
+	Node a;
+	a.max=x;
+	a.pre_max=x;
+	a.suff_max=x;
+	a.tsum=x;
+	return a;
+}
+
+
+Node merge(Node left,Node right)
+{
+	Node ans=getNode(0);
+	ans.pre_max=max(left.pre_max,max(left.tsum+right.pre_max,left.tsum+right.tsum));
+	ans.suff_max=max(right.suff_max,max(left.suff_max+right.tsum,left.tsum+right.tsum));
+	ans.tsum=left.tsum+right.tsum;
+	ans.max=max(left.pre_max,max(right.suff_max,max(left.suff_max+right.pre_max, max(left.max,max(right.max,ans.tsum)))));
+	return ans;
+}
+
+Node getMaxSumSubArray(int l,int r,vector<long long>&arr)
+{
+	if(l==r) return getNode(arr[l]);
+	int mid=(l+r)>>1;
+	Node left=getMaxSumSubArray(l,mid,arr);
+	Node right=getMaxSumSubArray(mid+1,r,arr);
+	return merge(left,right);
+}
+
+
+int main(){ 
+  
+    vector<long long> ar = {-2, -5, 6, -2, -3, 1, 5, -6}; 
+    int n = ar.size(); 
+    Node ans = getMaxSumSubArray(0, n-1, ar); 
+    cout << "Answer is " << ans.max << "\n"; 
+  
+    return 0; 
+} 
