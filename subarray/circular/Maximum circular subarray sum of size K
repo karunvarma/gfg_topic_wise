@@ -1,0 +1,48 @@
+#include <iostream>
+#include<vector>
+#include<bits/stdc++.h>
+#define ll long long
+using namespace std;
+
+
+
+int maxCircularSum(int* arr,int n,int k)
+{
+	
+	int sum=0,start=0,end=k-1;
+	
+	for(int i=0;i<k;i++)
+	{
+		sum+=arr[i];
+	}
+	
+	int ans=sum;
+	
+	for(int i=k;i<n+k;i++)
+	{
+		sum+=arr[i%n]-arr[((i-k)%n+n)%n];
+		
+		if(sum>ans)
+		{
+			ans=sum;
+			start=((i-k)%n+n)%n;
+			end=i%n;
+		}
+		
+	}
+	
+	cout<<ans<<endl;
+	cout<<start+1<<"-"<<end<<endl;
+}
+
+
+
+int main() 
+{ 
+    int arr[] =  { 18, 4, 3, 4, 5, 6, 7, 8, 2, 10 }; 
+    int n = sizeof(arr) / sizeof(arr[0]); 
+    int k = 3; 
+  
+    maxCircularSum(arr, n, k); 
+    return 0; 
+} 
