@@ -1,0 +1,107 @@
+
+
+
+
+
+
+
+// C++ program to merge a linked list into another at  
+// alternate positions  
+#include <bits/stdc++.h> 
+using namespace std; 
+  
+// A nexted list node  
+class Node  
+{  
+    public: 
+    int data;  
+    Node *next;  
+};  
+  
+/* Function to insert a node at the beginning */
+void push(Node ** head_ref, int new_data)  
+{  
+    Node* new_node = new Node(); 
+    new_node->data = new_data;  
+    new_node->next = (*head_ref);  
+    (*head_ref) = new_node;  
+}  
+  
+/* Utility function to print a singly linked list */
+void printList(Node *head)  
+{  
+    Node *temp = head;  
+    while (temp != NULL)  
+    {  
+        cout<<temp->data<<" ";  
+        temp = temp->next;  
+    }  
+    cout<<endl; 
+}  
+
+
+void merge(Node* pp,Node* qq)
+{
+	Node* ans=NULL;
+	Node* p=pp;
+	Node* q=qq;
+	while(p and q)
+	{
+		
+		Node* currp=p;
+		p=p->next;
+		currp->next=NULL;
+		
+		Node* currq=q;
+		q=q->next;
+		currq->next=NULL;
+		
+		if(ans==NULL)
+		{
+			ans=currp;
+			currp->next=currq;
+			ans=currq;
+		}
+		else
+		{
+			ans->next=currp;
+			currp->next=currq;
+			ans=currq;
+		}
+	}
+	
+	
+	// for first list
+	printList(pp);
+	
+	//for second list
+	if(p==NULL) printList(q);
+	else printList(p);
+}
+
+  
+// Driver code  
+int main()  
+{  
+    Node *p = NULL, *q = NULL;  
+    push(&p, 3);  
+    push(&p, 2);  
+    push(&p, 1);  
+    cout<<"First Linked List:\n";  
+    printList(p);  
+  
+    push(&q, 8);  
+    push(&q, 7);  
+    push(&q, 6);  
+    push(&q, 5);  
+    push(&q, 4);  
+    cout<<"Second Linked List:\n";  
+    printList(q);  
+  
+    merge(p,q);  
+  
+   
+  
+    return 0;  
+}  
+ 
