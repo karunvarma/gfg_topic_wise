@@ -1,0 +1,44 @@
+// C++ program to merge a linked list into another at  
+// alternate positions  
+
+//Remove minimum elements from ends of array so that sum decreases by at least K
+
+#include <bits/stdc++.h> 
+using namespace std; 
+  
+  
+  
+  
+  
+int minCount(int *arr,int n,int k)
+{
+	int sum=0;
+	for(int i=0;i<n;i++) sum+=arr[i];
+	sum-=k;
+
+	int l=0,r=0,tot=0;
+	int ans=0;
+	while(r<n)
+	{
+		tot+=arr[r];
+		while(l<n and tot>sum)
+		{
+			tot-=arr[l++];
+		}
+		ans=max(ans,r-l+1);	
+		r++;
+	}
+	return n-ans;
+}
+
+
+int main() 
+{ 
+    int arr[] = { 1, 11, 5, 5 }; 
+    int n = sizeof(arr) / sizeof(int); 
+    int k = 11; 
+  
+    cout << minCount(arr, n, k); 
+  
+    return 0; 
+} 
