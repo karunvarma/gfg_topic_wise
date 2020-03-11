@@ -1,0 +1,48 @@
+class Solution {
+public:
+    
+    string s;
+    void dfs(int i,vector<string> &ans,int dot,string temp)
+    {
+    
+        if(dot>4) return;
+        // if we reach the end of the string 
+        if(i==s.size())
+        {
+            // if no of dots is 4 then it is valid
+            if(dot==4)  
+            {
+                temp.pop_back();
+                ans.push_back(temp);
+            }
+            return;
+        }
+        
+        
+        int part=0;
+
+        
+        for(int k=i;k<s.size();k++)
+        {
+            part=(part*10)+(s[k]-'0');
+            if(part>255) break;
+            if(part==0)
+            {
+                dfs(k+1,ans,dot+1,temp+"0"+".");
+                break;
+            }
+            else
+            {
+                dfs(k+1,ans,dot+1,temp+to_string(part)+".");
+            }
+        }
+    }
+    
+    vector<string> restoreIpAddresses(string s) {
+        this->s=s;
+        int dot=0;
+        vector<string> ans;
+        dfs(0,ans,dot,"");
+        return ans;
+    }
+};
