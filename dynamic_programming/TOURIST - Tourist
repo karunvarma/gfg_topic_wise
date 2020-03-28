@@ -1,0 +1,69 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+char arr[120][120];
+
+int row,col;
+
+int dp[120][120][120];
+
+
+int find(int x1,int y1,int x2)
+{
+	
+	// at any time x1 + y1 = x2 + y2
+	// y2=(x1+y1)-x2;
+	
+	int y2=(x1+y1)-x2;
+	
+	if(x1>=row ||  x2>=row || y1>=col || y2>=col) return 0;
+	if(arr[x1][y1]=='#' || arr[x2][y2]=='#') return 0;
+	
+	
+	if(dp[x1][y1][x2]!=-1) return dp[x1][y1][x2];
+	
+	int ans=0;
+	if(arr[x1][y1]=='*') ans++;
+	if(arr[x2][y2]=='*') ans++;
+	
+	
+	// if both on the same location
+	if( arr[x1][y1]=='*' and  x1==x2 and y1==y2) ans=1;
+	
+	int r=find(x1+1,y1,x2);  
+	r=max(r,find(x1+1,y1,x2+1));
+	r=max(r,find(x1,y1+1,x2));
+	r=max(r,find(x1,y1+1,x2+1));
+	
+	return dp[x1][y1][x2]=r+ans;
+}
+
+// Driver code 
+int main() 
+{ 
+   
+    int t;
+    cin>>t;
+    
+    while(t--)
+    {
+    	
+    	memset(dp,-1,sizeof(dp));
+    	cin>>col>>row;
+    	
+    	// cout<<"row "<<row<<endl;
+    	// cout<<"col "<<col<<endl;
+    	
+    	for(int i=0;i<row;i++)
+    	{
+    		for(int j=0;j<col;j++)
+    		{
+    			cin>>arr[i][j];
+    		}
+    	}
+    	
+    	cout<<find(0,0,0)<<endl;
+    }
+   
+    return 0; 
+} 
