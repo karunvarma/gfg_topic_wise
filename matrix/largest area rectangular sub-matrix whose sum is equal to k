@@ -1,0 +1,100 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+// largest area rectangular sub-matrix whose sum is equal to k
+const int MAX = 100; 
+
+
+
+
+int check(int *arr,int n,int k,int &top,int &bottom)
+{
+	unordered_map<int,int> mp;
+	int curr_sum=0;
+	int len=0;
+	
+	for(int i=0;i<n;i++)
+	{
+		curr_sum+=arr[i];
+		
+		if(curr_sum==k)
+		{
+			len=i+1;
+			top=0;
+			bottom=i;
+		}
+		
+		
+		if(mp.find(curr_sum)==mp.end())
+		{
+			mp[curr_sum]=i;
+		}
+		
+		if(mp[curr_sum-k]!=mp.end())
+		{
+			if(len<(i-mp[curr_sum-k]))
+			{
+				len=i-mp[curr_sum-k];
+				top=mp[curr_sum-k]+1;
+				bottom=i;
+			}
+		}
+	}
+	
+	return len!=0;
+	
+}
+
+
+int sumZeroMatrix(int mat[][MAX],int row,int col,int k)
+{
+	
+	
+	int maxArea=INT_MIN;
+	int final_left=0,final_right=0,final_top=0,final_bottom=0;
+	
+	
+	for(int left=0;left<col;left++)
+	{
+		int temp[row];
+		memset(temp,0,sizeof(temp));
+		
+		for(int right=left,right<col;right++)
+		{
+			
+			// temp[i] it contains [left.......right]  of ith row
+			
+			for(int i=0;i<row;i++)
+			{
+				temp[i]+=mat[i][right];
+			}
+			
+			int top,bottom;
+		
+			int res=check(temp,row,k,top,bottom);
+			
+			int area=(right-left+1)*(bottom-top+1);
+			if( res and area<maxArea)
+			{
+				// update final_left,final_bottom,final_top,final_right and area
+			}
+		
+		}
+	}
+
+
+	
+}
+
+int main() 
+{ 
+    int mat[][MAX] = { { 1, 7, -6, 5 }, 
+                       { -8, 6, 7, -2 }, 
+                       { 10, -15, 3, 2 }, 
+                       { -5, 2, 0, 9 } }; 
+  
+    int row = 4, col = 4; 
+    int k = 7; 
+    sumZeroMatrix(mat, row, col, k); 
+    return 0; 
+} 
