@@ -1,0 +1,55 @@
+// C++ implementation of the approach 
+#include <bits/stdc++.h> 
+using namespace std; 
+
+// Function to return the number of 
+// subarrays with sum atleast k 
+int k_sum(int a[], int n, int k) 
+{ 
+	// To store the right index 
+	// and the current sum 
+	int r = 0, sum = 0; 
+
+	// To store the number of sub-arrays 
+	int ans = 0; 
+
+	// For all left indexes 
+	for (int l = 0; l < n; l++) { 
+
+		// Get elements till current sum 
+		// is less than k 
+		while (sum < k) { 
+			if (r == n) 
+				break; 
+			else { 
+				sum += a[r]; 
+				r++; 
+			} 
+		} 
+
+      	cout<<l<<" "<<r<<" "<<sum<<endl;
+		// No such subarray is possible 
+		if (sum < k) 
+			break; 
+
+		// Add all possible subarrays 
+		ans += n - r + 1; 
+
+		// Remove the left most element 
+		sum -= a[l]; 
+	} 
+
+	// Return the required answer 
+	return ans; 
+} 
+
+// Driver code 
+int main() 
+{ 
+	int a[] = { 6, 1, 2, 7 }, k = 10; 
+	int n = sizeof(a) / sizeof(a[0]); 
+
+	cout << k_sum(a, n, k); 
+
+	return 0; 
+} 
