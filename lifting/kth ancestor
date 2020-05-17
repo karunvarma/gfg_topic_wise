@@ -1,0 +1,68 @@
+#include <bits/stdc++.h>
+#define ll long long
+using namespace std;
+
+int LOG;
+vector<vector<int>> table;
+
+void init(int n)
+{
+    LOG=log2(n);
+    table.resize(n+1,vector<int>(LOG+1));
+    for(int i=0;i<=n;i++)
+        for(int j=0;j<=LOG;j++)
+            table[i][j]=-1;
+}
+
+
+int findkth(int node,int k)
+{
+    for(int i=0;i<=LOG;i++)
+    {
+        if(k&(1<<i))
+        {
+            node=table[node][i];
+            if(node==-1) break;
+        }
+    }
+    return node;
+}
+
+
+int main() {
+
+
+    int n=6;
+    init(n);
+    // (u,v) vth 0 th parent is u;
+
+    // 1 is a root
+    table[1][0]=-1;
+
+
+    table[2][0]=1;
+    table[3][0]=1;
+    table[4][0]=2;
+    table[5][0]=2;
+    table[6][0]=3;
+
+
+    for(int j=1;j<=LOG;j++)
+    {
+        for(int i=1;i<=n;i++)
+        {
+            // if current node pow(2,j-1) exist
+            if(table[i][j-1]!=-1)
+            {
+                table[i][j]=table[ table[i][j-1]  ][j-1];
+            }
+        }
+    }
+
+    int k=2,node=5;
+    cout<<findkth(node,k)<<endl;
+
+
+
+	return  0;
+}
