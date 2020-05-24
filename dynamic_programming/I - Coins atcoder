@@ -1,0 +1,81 @@
+#include <bits/stdc++.h>
+#define ll long long int
+#define ul unsigned long long int
+#define ld long double
+#define mp make_pair
+#define pb push_back
+#define ff first
+#define ss second
+#define pll pair<long long int, long long int>
+#define pii pair<int, int>
+#define vii vector<int>
+#define vll vector<long long int>
+#define sii set<int>
+#define sll set<long long int>
+#define usi unordered_set<int, custom_hash>
+#define usl unordered_set<long long int, custom_hash>
+#define mii map<int, int>
+#define mll map<long long int, long long int>
+#define umi unordered_map<int, int, custom_hash>
+#define uml unordered_map<long long int, long long int, custom_hash>
+#define ski stack<int>
+#define skl stack<long long int>
+#define all(v) v.begin(),v.end()
+using namespace std;
+struct custom_hash {
+    static uint64_t splitmix64(uint64_t x) {
+        // http://xorshift.di.unimi.it/splitmix64.c`
+        x += 0x9e3779b97f4a7c15;
+        x = (x ^ (x >> 30)) * 0xbf58476d1ce4e5b9;
+        x = (x ^ (x >> 27)) * 0x94d049bb133111eb;
+        return x ^ (x >> 31);
+    }
+
+    size_t operator()(uint64_t x) const {
+        static const uint64_t FIXED_RANDOM = chrono::steady_clock::now().time_since_epoch().count();
+        return splitmix64(x + FIXED_RANDOM);
+    }
+};
+
+
+const int N=3e3+1;
+const int mod=998244353;
+ld a[N], b[N], c[N];
+
+ld dp[N][N];
+
+int main() {
+	ios_base::sync_with_stdio(0);
+	cin.tie(0);cout.tie(0);
+#ifdef _DEBUG
+    freopen("input.txt", "r", stdin);
+#endif
+
+    
+    int n;
+    cin>>n;
+    for(int i=1;i<=n;++i){
+        cin>>a[i];
+    }
+
+    dp[0][0]=1;
+
+    for(int i=1;i<=n;++i){
+        for(int j=0;j<=i;++j){
+            if(j==0){
+                dp[i][j]=dp[i-1][j]*(1-a[i]);
+                continue;
+            }
+
+            dp[i][j]=dp[i-1][j]*(1-a[i])+dp[i-1][j-1]*a[i];
+
+        }
+    }
+    ld ans=0.0;
+    for(int i=(n+1)/2;i<=n;++i){
+        ans+=dp[n][i];
+    }
+
+    cout<<setprecision(15);
+    cout<<ans<<endl;
+}
