@@ -1,0 +1,49 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define faster cin.tie(0);ios_base::sync_with_stdio(0)
+#define ll long long
+#define MOD (int)(1e9+7)
+
+
+const int N=1e5+5;
+
+
+// fun(node,color);
+// func(node,white)=func(child,white)+func(child,black) + ;
+// func(node,black)=func(child,white);
+
+vector<int> edge[N];
+ll dp[N][2];
+int n;
+int u,v;
+
+// 0 for white
+// 1 for black
+
+void dfs(int x, int last)
+{
+   dp[x][0] = dp[x][1] = 1;
+	for (auto to : edge[x]) {
+		if (to == last) continue;
+		dfs(to, x);
+		dp[x][0] = dp[x][0] * ((dp[to][0] + dp[to][1]) % MOD) % MOD;
+		dp[x][1] = dp[x][1] * dp[to][0] % MOD;
+	}
+}
+ 
+
+int main()
+{
+	cin>>n;
+	memset(dp,1,sizeof(dp));
+	
+	for(int i=0;i<n-1;i++)
+	{
+		cin>>u>>v;
+		edge[u].push_back(v);
+		edge[v].push_back(u);
+	}
+	dfs(1,-1);
+	cout<<(dp[1][0]+dp[1][1])%MOD<<endl;
+}
+	
