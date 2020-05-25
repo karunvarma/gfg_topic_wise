@@ -1,0 +1,63 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define faster cin.tie(0);ios_base::sync_with_stdio(0)
+#define ll long long
+#define mod (int)(1e9+7)
+
+//  0-1 knapsack
+
+
+// solve(n,k)  --> solve(n-1,k); 
+
+// solve(n-1,k-1)
+	// solve(n-2,k-1)
+	
+	// solve(n-1,k-2)
+	// solve(n-1,k-3)
+	
+// solve(n-1,k-2);
+// solve(n-1,k-3);
+// .
+// .
+// solve(n-1,k-arr[n])
+
+
+// // rem all are invalid states
+// solve(n-1,k-arr[n]-1)
+// .
+// .
+// .
+
+int main()
+{
+	int n,k;
+	cin>>n>>k;
+	
+	int arr[n];  
+	for(int i=0;i<n;i++) cin>>arr[i];
+	
+	int dp[n+1][k+1];
+	for(int i=0;i<=n;i++) dp[i][0] = 1;
+	for(int i=1;i<=k;i++) dp[0][i] = 0;
+ 
+	
+	for(int i=1;i<=n;i++)
+	{
+		for(int j=1;j<=k;j++)
+		{
+			dp[i][j] = dp[i][j-1];
+			dp[i][j] += dp[i-1][j];
+			
+			
+			if(dp[i][j]>=mod)
+				dp[i][j] %= mod;
+			
+			if(j-arr[i-1]-1>=0)
+			dp[i][j]=(dp[i][j]-dp[i-1][j-arr[i-1]-1]+mod)%mod;
+		}
+	}
+	cout<<dp[n][k];
+	
+	
+}
+	
