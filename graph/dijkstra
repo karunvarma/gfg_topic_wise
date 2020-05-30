@@ -32,8 +32,5 @@ void dijkstra(ll source,ll *dist,bool *vis,vector<pii> adj[])
                 pq.push(make_pair(dist[v],v));
             }
         }
-    }
- 
-
-	
+    }	
 }
