@@ -1,0 +1,125 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define faster cin.tie(0);ios_base::sync_with_stdio(0)
+#define ll long long
+
+
+const int mx=1e5+2;
+vector<int> g[mx];
+vector<int> rg[mx];
+vector<int> ng[mx];
+bool vis[mx];
+vector<int> order;
+int comp[mx];
+stack<int> st;
+
+
+void dfs1 (int v) 
+{
+    vis[v] = true;
+    for (size_t i=0; i<g[v].size(); ++i)
+        if (!vis[ g[v][i] ])
+            dfs1(g[v][i]);
+    order.push_back (v);
+}
+
+void dfs2 (int v,int color) 
+{
+        
+        vis[v] = true;
+        comp[v]=color;
+        for(auto d:rg[v])
+        {
+            if(!vis[d])
+                dfs2(d,color);
+        
+        }
+}
+
+void dfs3(int u)
+{
+    vis[u]=true;
+    for(auto v:ng[u])
+    {
+        if(!vis[v]) dfs3(v);
+    }
+    st.push(u);
+}
+
+int main()
+{
+    faster;
+
+    memset(vis,0,sizeof(vis));
+    int n,m; cin>>n>>m;
+
+
+    vector<pair<int,int>> temp;
+    for(int i=0;i<m;i++)
+    {
+        int u,v;
+        cin>>u>>v;
+        temp.push_back({u,v});
+        g[u].push_back(v);
+        rg[v].push_back(u);
+    }
+
+
+    for(int i=1;i<=n;i++)
+    {
+        if(!vis[i]) dfs1(i);
+    }
+
+   
+
+    memset(vis,0,sizeof(vis));
+
+    int color=1;
+    for(int i=n-1;i>=0;i--)
+    {
+        if(vis[order[i]]==0)
+        {
+            dfs2(order[i],color);
+            color++;
+        }
+    }
+
+
+    // create a new graph base on color
+    for(auto x:temp)
+    {
+        ll u=x.first;
+        ll v=x.second;
+        if(comp[u]!=comp[v])
+        {
+            ng[comp[u]].push_back(comp[v]);
+        }
+    }
+
+
+    //  longest path in DAG
+
+    memset(vis,0,sizeof(vis));
+
+    for(int i=1;i<color;i++)
+    {
+        if(!vis[i]) dfs3(i);
+    }
+
+    vector<int> ans(color,0);
+    int res=0;
+    while(!st.empty())
+    {
+        int curr=st.top();
+        st.pop();
+
+        for(auto v:ng[curr])
+        {
+            ans[v]=max(ans[v],ans[curr]+1);
+            res=max(res,ans[v]);
+        }
+
+    }
+    cout<<res<<endl;
+    return 0;
+}
