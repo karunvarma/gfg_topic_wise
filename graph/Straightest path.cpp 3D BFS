@@ -1,0 +1,78 @@
+#include <bits/stdc++.h>
+#define MAX 1002
+using namespace std;
+char s[MAX][MAX];
+int n, m;
+int dx[] = {1, 0,-1,  0};
+int dy[] = {0, 1, 0, -1};
+int dis[MAX][MAX][4];
+
+bool valid(int x, int y)
+{
+    if ( x < 0 || y < 0 || x >= n || y >= m ) return false;
+    if ( s[x][y] == '*' ) return false;
+    return true;
+    
+}
+struct node {
+    int x, y, dir;
+    node() { }
+    node(int x, int y, int dir) {
+        this->x = x, this->y = y, this->dir = dir;
+    }
+};
+int main()
+{
+    int sx, sy, ex, ey, cnt1 = 0, cnt2 = 0;
+    
+    scanf("%d%d", &n, &m);
+   
+    for ( int i = 0; i < n; i++ ) {
+        scanf("%s", s[i]);
+        for ( int j = 0; j < m; j++ ) {
+            for ( int k = 0; k < 4; k++ ) dis[i][j][k] = INT_MAX;
+            if ( s[i][j] == 'V' ) {
+                sx = i, sy = j;
+            }
+            else if ( s[i][j] == 'H' ) {
+                ex = i, ey = j;
+                
+            }
+        }
+    }
+    
+
+    
+    queue <node> q;
+    
+    for ( int k = 0; k < 4; k++ ) {
+        dis[sx][sy][k] = 0;
+        q.push(node(sx, sy, k));
+    }
+    
+    while ( !q.empty() ) {
+        node f = q.front();
+        q.pop();
+        for ( int k = 0; k < 4; k++ ) {
+            int new_x = f.x + dx[k];
+            int new_y = f.y + dy[k];
+            if ( valid(new_x, new_y) ) {
+                if ( dis[f.x][f.y][f.dir] != INT_MAX &&  dis[new_x][new_y][k] > dis[f.x][f.y][f.dir] + (f.dir != k) ) {
+                    dis[new_x][new_y][k] = dis[f.x][f.y][f.dir] + (f.dir != k);
+                    q.push(node(new_x, new_y, k));
+                }
+            }
+        }
+    }
+    
+    int ans = INT_MAX;
+    
+    
+    for ( int k = 0; k < 4; k++ ) {
+        if (ans > dis[ex][ey][k] ) ans = dis[ex][ey][k];
+    }
+    if(ans==INT_MAX) ans=-1;
+    cout<<ans<<endl;
+    
+    return 0;
+}
