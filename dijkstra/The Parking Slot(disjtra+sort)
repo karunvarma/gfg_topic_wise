@@ -1,0 +1,108 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define faster cin.tie(0);ios_base::sync_with_stdio(0)
+#define ll long long
+#define pii pair<ll,ll> 
+
+const int mx=1e5+10;
+vector<pii> g[mx];
+
+int n,m,f;
+ll capacity[mx+1];
+
+
+void dijkstra(ll source,ll *dist,bool *vis,vector<pii> adj[])
+{
+    for(int i=0;i<=n;i++)
+    {
+        vis[i]=false;
+        dist[i]=LONG_MAX;
+    }
+
+    // min heap
+    priority_queue<pii,vector<pii>,greater<pii> >pq;
+    pq.push(make_pair(0,source));
+    dist[source]=0;
+    
+    while(!pq.empty())
+    {
+        pii p=pq.top();
+        pq.pop();
+        int u =(int) p.second;
+        if(vis[u]) continue;
+
+        vis[u]=true;
+
+        for(int i=0;i<adj[u].size();i++)
+        {
+            long v=adj[u][i].first;  ;
+            long weight=adj[u][i].second;
+
+            if(dist[v]>dist[u]+weight)
+            {
+                dist[v]=dist[u]+weight;
+                pq.push(make_pair(dist[v],v));
+            }
+        }
+    }	
+}
+
+
+int main()
+{
+    faster;
+    cin>>n>>m>>f;
+
+    for(int i=1;i<=n;i++) cin>>capacity[i];
+    for(int i=1;i<=m;i++)
+    {
+        int u,v,w;  cin>>u>>v>>w;
+        g[u].push_back({v,w});
+       // g[v].push_back({u,w});
+    }
+
+    ll dist[n+1];
+    bool vis[n+1];
+
+    memset(vis,0,sizeof(vis));
+    for(int i=1;i<=n;i++) dist[i]=INT_MAX;
+    ll src=1;
+    dijkstra(src,dist,vis,g);
+
+    vector<pii> vec;
+
+    for(int i=1;i<=n;i++)
+    {
+        if(dist[i]!=INT_MAX)vec.push_back({dist[i]+f,capacity[i]});
+    }
+    sort(vec.begin(),vec.end());
+    int limit=vec.size();
+
+    int i=0;
+    long k;
+    cin>>k;
+    
+    while(i!=limit && k)
+    {
+        long temp=min((ll)k,vec[i].second);
+        for(int h=0;h<temp;h++)
+        {
+            cout<<vec[i].first<<' ';
+        }
+        k=k-(temp);
+        i++;
+    }
+    for(int rem=0;rem<k;rem++)
+    {
+        if(i!=limit) cout<<(vec[i].first)<<' ';
+        else cout<<-1<<" ";
+    }
+    return 0;
+    
+
+
+
+
+
+    return 0;
+}
