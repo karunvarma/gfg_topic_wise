@@ -1,0 +1,151 @@
+#include <bits/stdc++.h>
+#define fast ios_base::sync_with_stdio(0);cin.tie(0);
+using namespace std;
+
+typedef pair<int,int> pii;
+typedef long long ll;
+
+
+// const values according to problems
+const int MAXN=10005;
+const int LOGN=20;
+
+vector<pii> graph[MAXN];
+int sparse[MAXN][LOGN];
+int level[MAXN];
+ll dist[MAXN];
+
+
+// no of nodes
+int N; 
+
+int lca_query(int u,int v)
+{
+	if(level[u]<level[v]) swap(u,v);
+	int diff=level[u]-level[v];
+	
+	for(int i=0;i<LOGN;i++)
+	{
+		if((1<<i) & diff)  u=sparse[u][i];
+	}
+	if(u==v) return v; 
+	
+	for(int i=LOGN-1;i>=0;i--)
+	{
+		if(sparse[u][i]!=sparse[v][i])
+		{
+			u=sparse[u][i];
+			v=sparse[v][i];
+		}
+	}
+	return sparse[u][0];
+}
+
+
+void dfs(int curr,int parent,int lvl)
+{
+	// fixing the 2^0 th parent 
+	sparse[curr][0]=parent;
+	level[curr]=lvl;
+	
+	
+	// filling the sparse table while traversing
+	for(int i=1;i<LOGN;i++)
+	{
+		int prev=sparse[curr][i-1];
+		if(prev!=-1)
+		{
+			sparse[curr][i]=sparse[prev][i-1];
+		}
+		else break;
+	}
+	
+	for(auto adj:graph[curr])
+	{
+	
+		int child=adj.first;
+		int cost=adj.second;
+		
+		if(child==parent) continue;
+		
+		// child distance from root;
+		dist[child]=0;
+		dist[child]=dist[curr]+cost;
+		dfs(adj.first,curr,lvl+1);
+	}
+}
+
+
+void init(int n)
+{
+	for(int i=0;i<=n;i++) 
+	{
+		dist[i]=0;
+		graph[i].clear();
+	}
+}
+
+
+int main()
+{
+	fast;
+	int tc; cin>>tc;
+	while(tc--)
+	{
+		
+		init(N+1);
+		cin>>N;
+		
+		for(int i=0;i<N-1;i++)
+		{
+			int u,v,w; cin>>u>>v>>w;
+			graph[u].push_back({v,w});
+			graph[v].push_back({u,w});
+		}
+		
+		
+		memset(sparse,-1,sizeof(sparse));
+		dist[1]=0ll;
+		
+		// calculate level and fill sparse talble using dfs
+		dfs(1,-1,1);
+		
+		
+		string s; 
+		while(cin>>s)
+		{
+			if(s=="DONE") break;
+			else if(s=="DIST")
+			{
+				int u,v; cin>>u>>v;
+				int lca=lca_query(u,v);
+				ll distance=dist[u]+dist[v]-2*dist[lca];
+				cout<<distance<<endl;
+			}
+			else
+			{
+				int u,v,k; cin>>u>>v>>k;
+				int lca=lca_query(u,v);
+				if(level[u]-level[lca]+1<k)
+				{
+					k-=level[u]-level[lca]+1;
+					k=level[v]-level[lca]+1-k;
+					swap(u,v);
+				}
+				k--;
+				
+				// kth ancestor node on of u  is our answer
+				
+				while(k)
+				{
+					int max_i=log2(k);
+					u=sparse[u][max_i];
+					k-=(1<<max_i);
+				}
+				cout<<u<<endl;
+			}
+		}
+		cout<<endl;
+	}
+	return 0;	
+}
