@@ -126,6 +126,9 @@ int main()
 			{
 				int u,v,k; cin>>u>>v>>k;
 				int lca=lca_query(u,v);
+				
+				// converting the problem to kh ancestor node by the below logic
+				// deciding whether to find in left side or right side of LCA node
 				if(level[u]-level[lca]+1<k)
 				{
 					k-=level[u]-level[lca]+1;
