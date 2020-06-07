@@ -1,0 +1,45 @@
+#include <bits/stdc++.h>
+#define fast ios_base::sync_with_stdio(0);cin.tie(0);
+using namespace std;
+
+typedef pair<int,int> pii;
+typedef long long ll;
+
+
+vector<int> adj_list[100005];
+int dp[100005][2];
+
+int dfs(int curr,int parent,bool took)
+{
+
+	if(dp[curr][took]!=-1) return dp[curr][took];
+	
+	int ans=0;
+	
+	for(auto child:adj_list[curr])
+	{
+		if(child==parent) continue;
+		if(took) ans+=min(dfs(child,curr,1),dfs(child,curr,0));
+		else ans+=dfs(child,curr,1);
+	}
+	return dp[curr][took]=ans+took;
+}
+
+
+int main()
+{
+    int n;
+    cin>>n;
+    
+    for (int i = 0; i < n-1; i++)
+    {
+        int u, v;
+        cin>>u>>v;
+        adj_list[u].push_back(v);
+        adj_list[v].push_back(u);
+    }
+    memset(dp, -1, sizeof(dp));
+    cout<<min(dfs(1,0,false),dfs(1, 0, true))<<endl;
+ 
+    return 0;
+}
