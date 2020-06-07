@@ -39,7 +39,7 @@ int main()
         adj_list[v].push_back(u);
     }
     memset(dp, -1, sizeof(dp));
-    cout<<min(dfs(1,0,false),dfs(1, 0, true))<<endl;
+    cout<<min(dfs(1,0,false), dfs(1, 0, true))<<endl;
  
     return 0;
 }
