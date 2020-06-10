@@ -1,0 +1,55 @@
+
+// good problem related to dependent and independent events ( counting principle)
+#include <bits/stdc++.h>
+#define fast ios_base::sync_with_stdio(0);cin.tie(0);
+using namespace std;
+
+typedef pair<int,int> pii;
+typedef long long ll;
+const int INF=99999999;
+
+const int N=16;
+
+double dp[20][1<<15];
+double arr[20][20];
+int n;
+
+double find(int curr,int mask)
+{
+
+	if(curr==n) return 1;
+	if(dp[curr][mask]!=-1.0) return dp[curr][mask];
+	double temp=0.0;
+	for(int j=0;j<n;j++)
+	{
+		if(!(mask&(1<<j)))
+		{
+			// current column is dependent so add
+			// for next column it is indepedent so mulitply
+			temp+=arr[curr][j]*find(curr+1,mask | (1<<j));
+		}
+	}
+	return dp[curr][mask]=temp;
+}
+
+
+int main()
+{
+	int t; cin>>t;
+	while(t--)
+	{
+
+		cin>>n;
+		
+		for(int i=0;i<n;i++)
+		{
+			for(int j=0;j<n;j++)
+			{
+				cin>>arr[i][j];
+			}
+			
+			for(int k=0;k<(1<<n);k++) dp[i][k]=-1.0;
+		}
+		printf("%.6lf\n",find(0,0));
+	}
+}
