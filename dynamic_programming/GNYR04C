@@ -40,7 +40,7 @@ int main()
 		memset(dp,-1,sizeof(dp));
 		int n,m;
 		scanf("%d%d",&n,&m);
-		printf("Data set %d: %d %d %lld\n",t,n,m,find(n,m));
+		printf("Data set %d: %d %d %lld\n",t,n,m,find(n,m)) ;
 	}
 	return 0;
 }
