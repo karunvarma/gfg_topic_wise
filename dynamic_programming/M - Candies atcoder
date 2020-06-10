@@ -56,7 +56,7 @@ int main()
 			dp[i][j]=(dp[i][j]-dp[i-1][j-arr[i-1]-1]+mod)%mod;
 		}
 	}
-	cout<<dp[n][k];
+	cout<<dp[n][k]; 
 	
 	
 }
