@@ -23,7 +23,7 @@ ll find(int n,int m)
 	
 	ll ch1=find(n,m-1);
   
-  // tricky state if we add m/2 --> 1 then i will we redudant counting
+  // tricky state if we add m/2 --> 1 then it will we redudant counting
 	ll ch2=find(n-1,m/2);
 	
 	return dp[n][m]=ch1+ch2;
